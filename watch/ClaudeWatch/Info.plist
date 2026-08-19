@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>ko</string>
+	<key>CFBundleDisplayName</key>
+	<string>클로드워치</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+
+	<!--
+	  아이폰 없이 워치 단독으로 도는 앱.
+	  WKWatchOnly 가 없으면 "짝이 되는 아이폰 앱을 대라"며 설치 자체가 거부됩니다.
+	  WKRunsIndependentlyOfCompanionApp 은 짝이 있는 앱용이라 같이 쓰면 안 됩니다 — 뜻이 모호해집니다.
+	-->
+	<key>WKApplication</key>
+	<true/>
+	<key>WKWatchOnly</key>
+	<true/>
+
+	<!--
+	  기본 브리지 주소.
+	  워치에서 주소를 손으로 넣거나 받아쓰기로 부르는 건 너무 고통스럽습니다.
+	  빌드할 때 박아 두고, 설정에서 바꿀 수 있게만 해 둡니다.
+	-->
+	<key>BridgeDefaultHost</key>
+	<string>__BRIDGE_HOST__</string>
+
+	<!--
+	  받아쓰기(음성 지시)에 필요합니다.
+	  이 설명이 없으면 시스템이 마이크를 조용히 거부해서, 입력 화면에서
+	  키보드만 되고 마이크는 눌러도 아무 일이 안 일어납니다.
+	-->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>말로 지시를 보내기 위해 마이크를 씁니다.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>말한 내용을 글자로 바꿔 맥의 클로드코드에 보냅니다.</string>
+
+	<!-- 승인 푸시를 백그라운드에서도 받습니다 -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+
+	<!--
+	  ATS 예외는 없습니다 — 일부러 뺐습니다.
+
+	  애플워치에는 Tailscale 을 설치할 수 없어서(watchOS 판이 없습니다) 워치는 tailnet 에
+	  들어가지 못합니다. 그래서 맥에서 `tailscale funnel 8765` 로 내주고, 워치는
+	  https://<맥이름>.<tailnet>.ts.net 로 붙습니다.
+
+	  Funnel 은 진짜 Let's Encrypt 인증서를 붙여 주므로 평문 예외가 필요 없습니다.
+	  NSAllowsArbitraryLoads 를 다시 넣지 마세요 — 넣는 순간 워치가 아무 서버나
+	  믿게 되고, 브리지는 이미 공개 인터넷에 있습니다.
+	-->
+</dict>
+</plist>

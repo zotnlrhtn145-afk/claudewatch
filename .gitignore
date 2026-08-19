@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+*.p8
+*.log
+.devices.json
+.allowed.json
+.DS_Store
+xcuserdata/
+DerivedData/
+build/

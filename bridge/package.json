@@ -1,0 +1,27 @@
+{
+  "name": "claudewatch-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "애플워치에서 클로드코드를 조종하기 위한 맥 브리지 서버",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "postinstall": "node scripts/fix-node-pty.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.233",
+    "express": "^5.1.0"
+  },
+  "optionalDependencies": {
+    "node-pty": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

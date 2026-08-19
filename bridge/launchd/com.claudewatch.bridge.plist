@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  브리지 서버를 로그인할 때 자동으로 띄웁니다.
+
+  LaunchDaemon(부팅 시)이 아니라 LaunchAgent(로그인 시)인 이유:
+  브리지가 클로드코드를 실행하려면 사용자 계정의 자격증명(~/.claude)이 필요하고,
+  Tailscale 도 사용자 세션에 붙어 있습니다. 로그인 없이 뜨면 둘 다 못 씁니다.
+
+  설치는 scripts/install-launchd.sh 로 하세요 — 경로를 실제 값으로 바꿔 넣어 줍니다.
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.claudewatch.bridge</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>__NODE__</string>
+		<string>__BRIDGE__/dist/index.js</string>
+	</array>
+
+	<key>WorkingDirectory</key>
+	<string>__BRIDGE__</string>
+
+	<key>RunAtLoad</key>
+	<true/>
+
+	<!-- 죽으면 다시 띄웁니다. 밖에 나가 있는데 조용히 꺼져 있으면 안 됩니다. -->
+	<key>KeepAlive</key>
+	<true/>
+
+	<!-- 재시작 폭주 방지 -->
+	<key>ThrottleInterval</key>
+	<integer>10</integer>
+
+	<key>EnvironmentVariables</key>
+	<dict>
+		<!--
+		  launchd 의 PATH 는 아주 짧습니다. 브리지가 `claude` 를 자식으로 띄우므로
+		  그게 있는 곳을 반드시 넣어야 합니다. 이게 없으면 세션 생성이 조용히 실패합니다.
+		-->
+		<key>PATH</key>
+		<string>__HOME__/.local/bin:__HOME__/.local/node/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+		<key>HOME</key>
+		<string>__HOME__</string>
+	</dict>
+
+	<key>StandardOutPath</key>
+	<string>__HOME__/Library/Logs/claudewatch/bridge.log</string>
+	<key>StandardErrorPath</key>
+	<string>__HOME__/Library/Logs/claudewatch/bridge.err.log</string>
+</dict>
+</plist>
